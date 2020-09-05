@@ -1,15 +1,28 @@
 import { ApolloError, ValidationError } from "apollo-server-express";
 import { AnagramAPI } from "../data/anagram";
+import { isAnagram } from "./anagramChecker";
 const resolverFunctions = {
   Query: {
     async Anagram_checkAnagram(_: any, args: any, context: any) {
       try {
         const input: any = JSON.parse(JSON.stringify(args));
-        const anagramAPI = new AnagramAPI();
-        const result = await anagramAPI.checkAnagram(
-          input.anagramRequest.anagramText
+        //checking anagram
+        const anagramResult: boolean = isAnagram(
+          input.anagramRequest.anagramTextA,
+          input.anagramRequest.anagramTextB
         );
-        return result;
+        //update anagram ranking
+        const anagramAPI = new AnagramAPI();
+        const result = await anagramAPI.storeAnagram(
+          input.anagramRequest.anagramTextA,
+          input.anagramRequest.anagramTextB
+        );
+        //return result
+        return {
+          isAnagram: anagramResult,
+          originalTextA: input.anagramRequest.anagramTextA,
+          originalTextB: input.anagramRequest.anagramTextB,
+        };
       } catch (err) {
         throw new ApolloError(err);
       }
