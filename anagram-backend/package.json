@@ -1,0 +1,37 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "tslint --project tsconfig.json",
+    "build": "./node_modules/.bin/tsc",
+    "start": "npm run build && node app/src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.15.1",
+    "apollo-server-express": "^2.15.1",
+    "apollo-server-integration-testing": "^2.3.0",
+    "axios": "^0.19.2",
+    "build-url": "^2.0.0",
+    "express": "^4.17.1",
+    "graphql": "^15.3.0",
+    "graphql-tools": "^6.0.12",
+    "merge-graphql-schemas": "^1.7.8",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.3",
+    "jest": "^25.5.4",
+    "ts-jest": "^25.5.1",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
+  },
+  "private": true,
+  "engines": {
+    "node": "10"
+  }
+}
