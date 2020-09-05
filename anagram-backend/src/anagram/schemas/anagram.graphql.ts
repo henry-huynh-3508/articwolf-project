@@ -6,11 +6,13 @@ const schema = gql`
   """
   type AnagramResult {
     isAnagram: Boolean
-    originalText: String
+    originalTextA: String
+    originalTextB: String
   }
 
   input AnagramRequest {
-    anagramText: String
+    anagramTextA: String
+    anagramTextB: String
   }
 
   """
