@@ -20,7 +20,6 @@ export class RedisAnagramAPI {
   public async storeAnagram(anagram: string) {
     try {
       const result = await this.redis.zincrby([this.key, 1, anagram]);
-      console.log(result);
     } catch (error) {
       console.error(error);
     }
