@@ -38,7 +38,6 @@ export class RedisAnagramAPI {
         MAX_RANK,
         "WITHSCORES",
       ]);
-      console.log(result);
       return result;
     } catch (error) {
       console.error(error);

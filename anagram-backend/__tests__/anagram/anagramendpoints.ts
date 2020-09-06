@@ -39,7 +39,7 @@ describe("Test Anagram Queries", () => {
       },
     });
     const anagramResult = response.data.Anagram_checkAnagram;
-    expect(anagramResult.isAnagram).toBeTrue();
+    expect(anagramResult.isAnagram).toBe(true);
     expect(anagramResult.originalTextA).toBeDefined();
     expect(anagramResult.originalTextB).toBeDefined();
   });
