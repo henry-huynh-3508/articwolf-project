@@ -7,19 +7,23 @@ const resolverFunctions = {
       try {
         const input: any = JSON.parse(JSON.stringify(args));
         //checking anagram
-        const anagramResult: boolean = isAnagram(
+        const anagramCheckingResult: boolean = isAnagram(
           input.anagramRequest.anagramTextA,
           input.anagramRequest.anagramTextB
         );
+
         //update anagram ranking
-        const anagramAPI = new AnagramAPI();
-        const result = await anagramAPI.storeAnagram(
-          input.anagramRequest.anagramTextA,
-          input.anagramRequest.anagramTextB
-        );
+        if (anagramCheckingResult === true) {
+          const anagramAPI = new AnagramAPI();
+          await anagramAPI.storeAnagram(
+            input.anagramRequest.anagramTextA,
+            input.anagramRequest.anagramTextB
+          );
+        }
+
         //return result
         return {
-          isAnagram: anagramResult,
+          isAnagram: anagramCheckingResult,
           originalTextA: input.anagramRequest.anagramTextA,
           originalTextB: input.anagramRequest.anagramTextB,
         };
