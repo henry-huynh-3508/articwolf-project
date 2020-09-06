@@ -1,10 +1,13 @@
 import React from "react";
-//import { useQuery } from "@apollo/react-hooks";
-
+import AnagramRankingTable from "../anagram_rankings/anagramRankingTable";
 /**
  * Main application
  */
 function AnagramApp() {
-  return <div></div>;
+  return (
+    <div>
+      <AnagramRankingTable></AnagramRankingTable>
+    </div>
+  );
 }
 export { AnagramApp };

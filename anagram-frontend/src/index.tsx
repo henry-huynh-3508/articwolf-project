@@ -17,12 +17,9 @@ export const client = new ApolloClient({
   link,
 });
 
-function App() {
-  return ReactDOM.render(
-    <ApolloProvider client={client}>
-      <AnagramApp />
-    </ApolloProvider>,
-    document.getElementById("root")
-  );
-}
-export default App;
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <AnagramApp />
+  </ApolloProvider>,
+  document.getElementById("root")
+);
