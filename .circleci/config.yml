@@ -1,0 +1,147 @@
+version: 2
+jobs:
+  #------------------------------------------------------------------------------
+  #UNIT TESTS FOR FRONT-END
+  test-frontend:
+    docker:
+      - image: circleci/node:13.11.0
+    working_directory: ~/repo/frontend
+    steps:
+      - checkout:
+          path: ~/repo
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      # install dependencies
+      - run: npm install
+      - run: CI=true npm test
+      - save_cache:
+          paths:
+            - node_modules
+
+          key: v1-dependencies-{{ checksum "package.json" }}
+  #------------------------------------------------------------------------------
+  #UNIT TESTS FOR BACK-END
+  test-backend:
+    docker:
+      - image: circleci/node:13.11.0
+    working_directory: ~/repo/backend
+    steps:
+      - checkout:
+          path: ~/repo
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      # BACK END SECRET KEYS
+      - run: cd keys && printenv DEV_WEATHER_API_KEY > weather-key.json
+
+      # install dependencies
+      - run: npm install
+      # run test
+      - run: npm test
+
+      # save new caches
+      - save_cache:
+          paths:
+            - node_modules
+
+          key: v1-dependencies-{{ checksum "package.json" }}
+  #------------------------------------------------------------------------------
+  #DEPLOY-FRONTEND will bring the webapp to staging environment using master branch
+  deploy-frontend:
+    docker:
+      - image: circleci/node:13.11.0
+    working_directory: ~/repo/frontend
+    steps:
+      - checkout:
+          path: ~/repo
+      # Install firebase tools
+      - run: mkdir ~/.npm-global
+      - run: npm config set prefix '~/.npm-global'
+      - run: export PATH=~/.npm-global/bin:$PATH
+      - run: source ~/.profile
+      - run: sudo npm install -g firebase-tools --unsafe-perm
+      - run: ls -la
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      # Frontend .env injection
+      - run: echo -n $FRONTEND_ENV | tr " " "\n" > .env
+      # install dependencies
+      - run: npm install
+
+      # save new caches
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}-
+
+      # run build
+      - run: npm run build
+      # deploy using firebase
+      - run: sudo firebase use --token=$DEV_FIREBASE_TOKEN development
+      - run: sudo firebase deploy --force --token=$DEV_FIREBASE_TOKEN --project development --except firestore:indexes
+  #------------------------------------------------------------------------------
+  #DEPLOY-BACKEND will lauch backend deployment pipeline
+  deploy-backend:
+    docker:
+      - image: circleci/node:13.11.0
+    working_directory: ~/repo/backend
+    steps:
+      - checkout:
+          path: ~/repo
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      # install dependencies
+      - run: npm install
+
+      # save new caches
+      - save_cache:
+          paths:
+            - node_modules
+
+          key: v1-dependencies-{{ checksum "package.json" }}
+      # run build
+      # TODO add deployment from gcloud services
+
+#------------------------------------------------------------------------------
+#ALL NEW DEPLOYMENTS MUST PASS ALL TESTS!!!
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - test-frontend:
+          filters:
+            branches:
+              only:
+                - master
+      - test-backend:
+          filters:
+            branches:
+              only:
+                - master
+      - deploy-frontend:
+          requires:
+            - test-frontend
+          filters:
+            branches:
+              only: master
+      - deploy-backend:
+          requires:
+            - test-backend
+          filters:
+            branches:
+              only: master
