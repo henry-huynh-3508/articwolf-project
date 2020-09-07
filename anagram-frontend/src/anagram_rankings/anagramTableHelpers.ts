@@ -20,7 +20,6 @@ export function createAnagramItem(
 }
 
 export function createAnagramRowData(rawdata: any) {
-  console.log(rawdata);
   const top10: any[] = rawdata.Anagram_getTop10Anagrams.top10;
 
   return top10.map((item, index) =>
