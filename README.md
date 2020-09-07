@@ -1,23 +1,65 @@
+# AnagramProject
 
-## Available Scripts
-In the project directory, you can run:
+This is a simple project that builds an anagram web application.
 
-### `npm start`
-Make sure to `npm install` to install all dependencies before you start
+### Prerequisites
 
-Runs the app in the development mode.<br />
-Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
-By default, backend server will run on port 8080, make sure to run backend server if you want to test live call.
+What things you need to install and how to install them
 
-### `npm test`
+```
+https://nodejs.org/en/
+https://redis.io
+```
+For front-end, cd into anagram-frontend, run npm install, then npm start to launch the react application.
+For back-end, cd into anagram-backend, run npm install, then npm start to launch graphql server.
+Note: make sure you have a redis server running locally.
 
-Launches the test runner in the interactive watch mode.<br />
-### `npm run build`
+## Frontend prototype
+* [Frontend prototype](https://www.figma.com/file/wnXGdIRqnVyjxyXRyzaQJu/articwolf-project?node-id=0%3A1)
+## Backend Architecture
+* [Backend Architecture](https://drive.google.com/file/d/1x8nRWt49wxDz3WECgY6KsCIVPfhTCjCJ/view?usp=sharing)
+## Running the tests
 
-Builds the app for production to the `app` folder.<br />
+Test can be run in both frontend and backend folder.
+
+
+
+### Break down into frontend tests
+
+You can follow these instructions to test frontend
+
+```
+Start at the root directory of the project
+cd frontend
+npm test
+```
+
+### Break down into backend tests
+
+You can follow these instructions to test backend
+
+```
+Start at the root directory of the project
+cd backend
+npm test
+```
 
 ## Deployment
 
-Deployment can be done thru any docker container hosting services (AWS/Google Cloud)
-There is a Dockerfile in the current directory. You can use this Dockerfile to build the docker image for deployment 
-then deploy the image using any cloud providers or you can self-hosting the container by yourself.
+Deployment process is completely automated with circleci. Please check .circleci for more info.
+
+## Built With
+
+* [React](https://reactjs.org/) - The frontend framework used
+* [GraphQL](https://www.apollographql.com/) - The backend framework used
+* [Redis](https://redis.io) - Storage solution
+## Versioning
+For the versions available, see the [tags on this repository](https://github.com/henry-huynh-3508/articwolf-project/tags). 
+
+## Authors
+
+* **Henry Huynh** - *Initial work* 
+
+## License
+
+This project is licensed under the MIT License - Feel free to clone and run on your own.
